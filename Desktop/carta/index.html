@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Carta Romântica</title>
+    <style>
+        /* Estilo geral da página */
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: #f9d4e7;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+
+        /* Background com chuva de corações */
+        .heart-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .heart-background .heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: red;
+            transform: rotate(-45deg);
+            animation: fall linear infinite;
+            pointer-events: none;
+        }
+
+        .heart-background .heart::before,
+        .heart-background .heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: red;
+            border-radius: 50%;
+        }
+
+        .heart-background .heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .heart-background .heart::after {
+            top: 0;
+            left: 10px;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(-10%) rotate(-45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(110vh) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+
+        /* Container da carta */
+        .card-container {
+            perspective: 1000px; /* Cria a sensação de profundidade */
+            width: 350px;
+            height: 250px;
+            cursor: pointer;
+        }
+
+        /* Estilo da carta */
+        .card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: preserve-3d; /* Mantém os elementos em 3D */
+            transition: transform 1s ease-in-out; /* Animação suave */
+        }
+
+        /* Efeito de virar ao passar o mouse */
+        .card-container:hover .card {
+            transform: rotateY(180deg); /* Gira 180 graus para mostrar o verso */
+        }
+
+        /* Frente da carta */
+        .front,
+        .back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden; /* Esconde o verso enquanto a frente está visível */
+            border-radius: 15px;
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 20px;
+        }
+
+        /* Frente da carta */
+        .front {
+            background: #b31e2d; /* Vermelho escuro */
+            color: white;
+        }
+
+        .front h1 {
+            font-size: 1.8rem;
+            font-family: 'Georgia', serif;
+        }
+
+        /* Verso da carta */
+        .back {
+            background: #fffefc; /* Branco creme */
+            color: #333;
+            transform: rotateY(180deg); /* Inicialmente virado para trás */
+        }
+
+        .back h1 {
+            font-size: 1.6rem;
+            color: #ff6f61; /* Rosa suave */
+            margin-bottom: 10px;
+            font-family: 'Georgia', serif;
+        }
+
+        .back p {
+            font-size: 0.9rem;
+            line-height: 1.6;
+            font-family: 'Arial', sans-serif;
+        }
+
+        /* Corações adicionais ao passar o mouse */
+        .additional-heart {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: red;
+            transform: rotate(-45deg);
+            animation: fall-fast linear 3s forwards;
+            pointer-events: none;
+        }
+
+        .additional-heart::before,
+        .additional-heart::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background: red;
+            border-radius: 50%;
+        }
+
+        .additional-heart::before {
+            top: -10px;
+            left: 0;
+        }
+
+        .additional-heart::after {
+            top: 0;
+            left: 10px;
+        }
+
+        @keyframes fall-fast {
+            0% {
+                transform: translateY(0) rotate(-45deg);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh) rotate(-45deg);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background com chuva de corações -->
+    <div class="heart-background">
+        <div class="heart" style="left: 10%; animation-duration: 5s;"></div>
+        <div class="heart" style="left: 25%; animation-duration: 7s;"></div>
+        <div class="heart" style="left: 40%; animation-duration: 6s;"></div>
+        <div class="heart" style="left: 55%; animation-duration: 8s;"></div>
+        <div class="heart" style="left: 70%; animation-duration: 4s;"></div>
+        <div class="heart" style="left: 85%; animation-duration: 9s;"></div>
+    </div>
+
+    <!-- Carta que vira -->
+    <div class="card-container">
+        <div class="card">
+            <!-- Frente da carta -->
+            <div class="front">
+                <h1>Para a noiva mais linda do mundo</h1>
+            </div>
+            <!-- Verso da carta -->
+            <div class="back">
+                <h1>Cantares 4:7</h1> <ol>
+		<p>"Você é toda linda, em ti não há defeito algum."</p>                
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const cardContainer = document.querySelector('.card-container');
+
+        // Adiciona corações ao passar o mouse
+        cardContainer.addEventListener('mouseover', () => {
+            createAdditionalHearts();
+        });
+
+        function createAdditionalHearts() {
+            for (let i = 0; i < 20; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.classList.add('additional-heart');
+                    heart.style.left = Math.random() * 100 + 'vw';
+                    heart.style.top = Math.random() * 100 + 'vh';
+                    document.body.appendChild(heart);
+
+                    setTimeout(() => {
+                        heart.remove();
+                    }, 3000);
+                }, i * 100);
+            }
+        }
+    </script>
+</body>
+</html>
